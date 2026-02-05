@@ -2,8 +2,9 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from pypdf import PdfReader
+import os
 
-RawText = ""
+FinalText = ""
 
 class App(TkinterDnD.Tk):
     def __init__(self):
@@ -26,19 +27,18 @@ class App(TkinterDnD.Tk):
         self.label.drop_target_register(DND_FILES)
         self.label.dnd_bind("<<Drop>>", self.drop)
 
-        # Create the Copy button **on the main window**, but hide until needed
         self.copy_button = tk.Button(self, text="Copy ",font=("Arial", 20), height=3, width=10, command=self.copy_to_clipboard)
-        # Don't pack yet — we'll pack it after a PDF is dropped
 
     def copy_to_clipboard(self):
         self.clipboard_clear()
-        self.clipboard_append(RawText)
+        self.clipboard_append(FinalText)
         self.update()
-        messagebox.showinfo("Copied", "Test copied to clipboard!")
+        self.copy_button.config(text="Copied")
 
     def drop(self, event):
-        global RawText
-        RawText = ""  # reset text on each drop
+        global FinalText
+        FinalText = ""
+        self.copy_button.config(text="Copy")
 
         file_path = event.data.strip("{}")
 
@@ -54,20 +54,20 @@ class App(TkinterDnD.Tk):
                 break
             if "100. " in page.extract_text():
                 lastPage = True
-                print("Found in: " + str(pageNum))
             
             if pageNum == 0:
                 pass
             else:
+                toRemove = ["Copyright ©", "Test "]
                 page_text = "\n".join(
                     line for line in page.extract_text().splitlines()
-                    if "Copyright ©" or "Test " not in line
+                    if not any(p in line for p in toRemove)
                 )
-                RawText += page_text
 
-        print(RawText)
+                FinalText += page_text
 
-        # Show the copy button now
+        file_name = os.path.basename(file_path)
+        self.label.config(text=file_name)
         self.copy_button.pack(pady=10)
 
 if __name__ == "__main__":
