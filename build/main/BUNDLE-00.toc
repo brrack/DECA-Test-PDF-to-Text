@@ -1,0 +1,3 @@
+([('main',
+   '/Users/brack/Documents/Code/DECA-Test-PDF-to-Text/dist/main',
+   'EXECUTABLE')],)
