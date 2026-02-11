@@ -27,8 +27,8 @@ class App(TkinterDnD.Tk):
         self.label.drop_target_register(DND_FILES)
         self.label.dnd_bind("<<Drop>>", self.drop)
 
-        self.copy_button = tk.Button(self, text="Copy Questions",font=("Arial", 23), height=3, width=13, command=lambda:self.copy_to_clipboard(FinalText, "questions"))
-        self.copy_answers_button = tk.Button(self, text="Copy Answers ",font=("Arial", 23), height=3, width=13, command=lambda:self.copy_to_clipboard(AnswersText, "answers"))
+        self.copy_button = tk.Button(self, text="Copy Questions",font=("Arial", 23), height=3, command=lambda:self.copy_to_clipboard(FinalText, "questions"))
+        self.copy_answers_button = tk.Button(self, text="Copy Answers ",font=("Arial", 23), height=3, command=lambda:self.copy_to_clipboard(AnswersText, "answers"))
 
     def copy_to_clipboard(self, copytext, type):
         self.clipboard_clear()
@@ -86,8 +86,8 @@ class App(TkinterDnD.Tk):
 
         file_name = os.path.basename(file_path)
         self.label.config(text=file_name)
-        self.copy_button.pack(side=tk.LEFT, pady=5)
-        self.copy_answers_button.pack(side=tk.RIGHT)
+        self.copy_button.pack(side=tk.LEFT, pady=5, expand=True)
+        self.copy_answers_button.pack(side=tk.RIGHT, expand=True)
 
 if __name__ == "__main__":
     app = App()
